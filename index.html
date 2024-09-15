@@ -166,7 +166,7 @@
                         <h3>${item.l}</h3>
                         <p>${item.s ? item.s : 'No description available'}</p>
                         <p>${item.y ? item.y : ''}</p>
-                        <p>${item.qid === 'movie' || item.qid === 'tvMovie' ? 'Movie' : 'TV Series'}</p>
+                        <p>${item.qid === 'movie' || item.qid === 'tvMovie' || item.qid === 'short' ? 'Movie' : 'TV Series'}</p>
                     `;
                     output.appendChild(preview);
                 });
