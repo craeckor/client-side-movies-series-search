@@ -8,4 +8,4 @@ This simple website is kind of a PoC (Proof of Concept) for showing the possibil
 3. Access your webserver in the browser.
 
 # CORS
-CORS is something which you cannot really achieve client-side and that's why I'm forced to use a CORS-bypasser one time. This problem is with multiembed.mov where the VIP-stream-check requires CORS for some reason. The stream itself doesn't. For this I use cors.craeckor.ch. The second problem is the IMDB-API. I'm also forced to use CORS-bypasser there.
+CORS is something which you cannot really achieve client-side and that's why I'm forced to use a CORS-bypasser two times. This problem is with multiembed.mov where the VIP-stream-check requires CORS for some reason. The stream itself doesn't. For this I use cors.craeckor.ch. The second problem is the IMDB-API. I'm also forced to use CORS-bypasser there.
