@@ -192,7 +192,7 @@
                 } else if (currentHost === 'autoembed') {
                     src = `https://player.autoembed.cc/embed/tv/${currentImdbId}/${currentSeason}/${currentEpisode}`;
                 } else if (currentHost === 'superembed') {
-                    const vipCheckUrl = `https://cors-error-remover-07cea8dd23f9.herokuapp.com/https://multiembed.mov/directstream.php?video_id=${currentImdbId}&s=${currentSeason}&e=${currentEpisode}&check=1`;
+                    const vipCheckUrl = `https://cors.craeckor.ch/https://multiembed.mov/directstream.php?video_id=${currentImdbId}&s=${currentSeason}&e=${currentEpisode}&check=1`;
                     const vipAvailable = await checkVipAvailability(vipCheckUrl);
                     if (vipAvailable) {
                         src = `https://multiembed.mov/directstream.php?video_id=${currentImdbId}&s=${currentSeason}&e=${currentEpisode}`;
