@@ -136,7 +136,7 @@
                 document.getElementById('output').innerHTML = '';
                 return;
             }
-            const url = `https://cors.craeckor.ch/v3.sg.media-imdb.com/suggestion/x/${input}.json?includeVideos=1`;
+            const url = `https://api-csmss.craeckor.ch/https://v3.sg.media-imdb.com/suggestion/x/${input}.json?includeVideos=1`;
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
