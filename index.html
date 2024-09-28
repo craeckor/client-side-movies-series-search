@@ -3,83 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMDB Movie and Series Search</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #output {
-            margin-top: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        .preview {
-            border: 1px solid #ddd;
-            padding: 10px;
-            width: 200px;
-            cursor: pointer;
-            text-align: center;
-        }
-        .preview img {
-            max-width: 100%;
-            height: auto;
-        }
-        .preview h3 {
-            font-size: 1.2em;
-            margin: 10px 0;
-        }
-        .preview p {
-            font-size: 0.9em;
-            color: #555;
-        }
-        #iframeContainer {
-            display: none;
-            margin-top: 20px;
-            position: relative;
-        }
-        #iframeContainer iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-        }
-        #buttonContainer {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-        #leftControls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        #rightControls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        #closeButton, #fullscreenButton, #seasonBackButton, #seasonForwardButton, #episodeBackButton, #episodeForwardButton {
-            background: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        #infoText {
-            margin-top: 10px;
-            font-size: 1em;
-            color: #333;
-        }
-        footer {
-            margin-top: 20px;
-            text-align: center;
-        }
-    </style>
+    <title>Movie and Series Search</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/switcher.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var script = document.createElement("script");
+            script.src = "assets/js/imdb.js";
+            document.head.appendChild(script);
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var script = document.createElement("script");
+            script.src = "assets/js/tmdb.js";
+            document.head.appendChild(script);
+        });
+    </script>
 </head>
 <body>
-    <h1>IMDB Movie and Series Search</h1>
+    <h1>Movie and Series Search</h1>
+    <button id="switchEngineButton" onclick="switchEngine()">Switch to TMDB</button>
     <input type="text" id="searchInput" placeholder="Enter search term">
     <div id="iframeContainer">
         <iframe id="movieIframe" allowfullscreen></iframe>
@@ -96,6 +40,7 @@
                     <option value="moviesapi">Moviesapi</option>
                     <option value="primewire">PrimeWire</option>
                     <option value="filmku">FILMku</option>
+                    <option value="vidsrc-nl">VidSrc.nl</option>
                 </select>
                 <div id="infoText"></div>
             </div>
@@ -112,196 +57,8 @@
     <div id="output"></div>
     <footer>
         <a href="https://github.com/craeckor/client-side-movies-series-search" target="_blank">
-            <img src="assets/image/github.png" alt="GitHub" style="width: 24px; height: 24px;">
+            <img src="assets/image/github-mark.svg" alt="GitHub" style="width: 24px; height: 24px;">
         </a>
     </footer>
-
-    <script>
-        let debounceTimeout;
-        let currentImdbId = '';
-        let currentSeason = 1;
-        let currentEpisode = 1;
-        let isSeries = false;
-        let currentTitle = '';
-        let currentHost = 'vidsrc-pro';
-
-        document.getElementById('searchInput').addEventListener('input', () => {
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(fetchData, 300);
-        });
-
-        async function fetchData() {
-            const input = document.getElementById('searchInput').value;
-            if (input.trim() === '') {
-                document.getElementById('output').innerHTML = '';
-                return;
-            }
-            const url = `https://api-csmss.craeckor.ch/https://v3.sg.media-imdb.com/suggestion/x/${input}.json?includeVideos=1`;
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                if (!data.d) {
-                    throw new Error('Invalid data format');
-                }
-                displayResults(data.d);
-            } catch (error) {
-                document.getElementById('output').textContent = 'Error fetching data: ' + error.message;
-            }
-        }
-
-        function displayResults(results) {
-            const output = document.getElementById('output');
-            output.innerHTML = '';
-            results
-                .filter(item => item.id.startsWith('tt'))
-                .forEach(item => {
-                    const preview = document.createElement('div');
-                    preview.className = 'preview';
-                    preview.onclick = () => openIframe(item.id, item.qid, item.l);
-                    preview.innerHTML = `
-                        <img src="${item.i ? item.i.imageUrl : 'https://via.placeholder.com/200'}" alt="${item.l}">
-                        <h3>${item.l}</h3>
-                        <p>${item.s ? item.s : 'No description available'}</p>
-                        <p>${item.y ? item.y : ''}</p>
-                        <p>${item.qid === 'movie' || item.qid === 'tvMovie' || item.qid === 'short' ? 'Movie' : 'TV Series'}</p>
-                    `;
-                    output.appendChild(preview);
-                });
-        }
-
-        function openIframe(imdbId, qid, title) {
-            currentImdbId = imdbId;
-            isSeries = qid === 'tvSeries' || qid === 'tvMiniSeries';
-            currentSeason = 1;
-            currentEpisode = 1;
-            currentTitle = title;
-            document.getElementById('iframeContainer').style.display = 'block';
-            updateIframe(); // Ensure the iframe is updated immediately
-        }
-
-        async function updateIframe() {
-            const movieIframe = document.getElementById('movieIframe');
-            const infoText = document.getElementById('infoText');
-            let src = '';
-            if (isSeries) {
-                if (currentHost === 'vidsrc-pro') {
-                    src = `https://vidsrc.pro/embed/tv/${currentImdbId}/${currentSeason}/${currentEpisode}`;
-                } else if (currentHost === 'autoembed') {
-                    src = `https://player.autoembed.cc/embed/tv/${currentImdbId}/${currentSeason}/${currentEpisode}`;
-                } else if (currentHost === 'superembed') {
-                    const vipCheckUrl = `https://cors.craeckor.ch/https://multiembed.mov/directstream.php?video_id=${currentImdbId}&s=${currentSeason}&e=${currentEpisode}&check=1`;
-                    const vipAvailable = await checkVipAvailability(vipCheckUrl);
-                    if (vipAvailable) {
-                        src = `https://multiembed.mov/directstream.php?video_id=${currentImdbId}&s=${currentSeason}&e=${currentEpisode}`;
-                    } else {
-                        src = `https://multiembed.mov/?video_id=${currentImdbId}&s=${currentSeason}&e=${currentEpisode}`;
-                    }
-                } else if (currentHost === '2embed') {
-                    src = `https://www.2embed.cc/embedtv/${currentImdbId}&s=${currentSeason}&e=${currentEpisode}`;
-                } else if (currentHost === 'vidsrc-me') {
-                    src = `https://vidsrc.xyz/embed/tv?imdb=${currentImdbId}&season=${currentSeason}&episode=${currentEpisode}`;
-                } else if (currentHost === 'vidsrc-cc') {
-                    src = `https://vidsrc.cc/v2/embed/tv/${currentImdbId}/${currentSeason}/${currentEpisode}`;
-                } else if (currentHost === 'smashystream') {
-                    src = `https://player.smashy.stream/tv/${currentImdbId}?s=${currentSeason}&e=${currentEpisode}`;
-                } else if (currentHost === 'moviesapi') {
-                    src = `https://moviesapi.club/tv/${currentImdbId}-${currentSeason}-${currentEpisode}`;
-                } else if (currentHost === 'primewire') {
-                    src = `https://www.primewire.tf/embed/tv?imdb=${currentImdbId}&season=${currentSeason}&episode=${currentEpisode}`;
-                } else if (currentHost === 'filmku') {
-                    src = `https://filmku.stream/embed/series?imdb=${currentImdbId}&sea=${currentSeason}&epi=${currentEpisode}`;
-                }
-                infoText.textContent = `${currentTitle} - Season ${currentSeason}, Episode ${currentEpisode}`;
-                document.getElementById('seasonBackButton').style.display = 'inline';
-                document.getElementById('seasonForwardButton').style.display = 'inline';
-                document.getElementById('episodeBackButton').style.display = 'inline';
-                document.getElementById('episodeForwardButton').style.display = 'inline';
-            } else {
-                if (currentHost === 'vidsrc-pro') {
-                    src = `https://vidsrc.pro/embed/movie/${currentImdbId}`;
-                } else if (currentHost === 'autoembed') {
-                    src = `https://player.autoembed.cc/embed/movie/${currentImdbId}`;
-                } else if (currentHost === 'superembed') {
-                    const vipCheckUrl = `https://cors.craeckor.ch/https://multiembed.mov/directstream.php?video_id=${currentImdbId}&check=1`;
-                    const vipAvailable = await checkVipAvailability(vipCheckUrl);
-                    if (vipAvailable) {
-                        src = `https://multiembed.mov/directstream.php?video_id=${currentImdbId}`;
-                    } else {
-                        src = `https://multiembed.mov/?video_id=${currentImdbId}`;
-                    }
-                } else if (currentHost === '2embed') {
-                    src = `https://www.2embed.cc/embed/${currentImdbId}`;
-                } else if (currentHost === 'vidsrc-me') {
-                    src = `https://vidsrc.xyz/embed/movie?imdb=${currentImdbId}`;
-                } else if (currentHost === 'vidsrc-cc') {
-                    src = `https://vidsrc.cc/v2/embed/movie/${currentImdbId}`;
-                } else if (currentHost === 'smashystream') {
-                    src = `https://player.smashy.stream/movie/${currentImdbId}`;
-                } else if (currentHost === 'moviesapi') {
-                    src = `https://moviesapi.club/movie/${currentImdbId}`;
-                } else if (currentHost === 'primewire') {
-                    src = `https://www.primewire.tf/embed/movie?imdb=${currentImdbId}`;
-                } else if (currentHost === 'filmku') {
-                    src = `https://filmku.stream/embed/movie?imdb=${currentImdbId}`;
-                }
-                infoText.textContent = currentTitle;
-                document.getElementById('seasonBackButton').style.display = 'none';
-                document.getElementById('seasonForwardButton').style.display = 'none';
-                document.getElementById('episodeBackButton').style.display = 'none';
-                document.getElementById('episodeForwardButton').style.display = 'none';
-            }
-            movieIframe.src = src; // Set the src attribute to load the iframe content
-        }
-
-        async function checkVipAvailability(url) {
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-                return text.trim() === '1';
-            } catch (error) {
-                console.error('Error checking VIP availability:', error);
-                return false;
-            }
-        }
-
-        function closeIframe() {
-            const iframeContainer = document.getElementById('iframeContainer');
-            const movieIframe = document.getElementById('movieIframe');
-            movieIframe.src = '';
-            iframeContainer.style.display = 'none';
-        }
-
-        function toggleFullscreen() {
-            const movieIframe = document.getElementById('movieIframe');
-            if (movieIframe.requestFullscreen) {
-                movieIframe.requestFullscreen();
-            } else if (movieIframe.mozRequestFullScreen) { // Firefox
-                movieIframe.mozRequestFullScreen();
-            } else if (movieIframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                movieIframe.webkitRequestFullscreen();
-            } else if (movieIframe.msRequestFullscreen) { // IE/Edge
-                movieIframe.msRequestFullscreen();
-            }
-        }
-
-        function changeSeason(change) {
-            currentSeason = Math.max(1, currentSeason + change);
-            currentEpisode = 1; // Reset episode to 1 when changing season
-            updateIframe();
-        }
-
-        function changeEpisode(change) {
-            currentEpisode = Math.max(1, currentEpisode + change);
-            updateIframe();
-        }
-
-        function changeHost() {
-            currentHost = document.getElementById('hostSelect').value;
-            updateIframe();
-        }
-    </script>
 </body>
 </html>
