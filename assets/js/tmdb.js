@@ -173,7 +173,7 @@ if (getCookie('currentEngine') === 'tmdb') {
             } else if (currentHost === 'filmku') {
                 src = `https://filmku.stream/embed/series?tmdb=${currentTmdbId}&sea=${currentSeason}&epi=${currentEpisode}`;
             } else if (currentHost === 'vidsrc-nl') { 
-                src = `https://player.vidsrc.nl/embed/tv/${currentImdbId}/${currentSeason}/${currentEpisode}`;
+                src = `https://player.vidsrc.nl/embed/tv/${currentTmdbId}/${currentSeason}/${currentEpisode}`;
             } else if (currentHost === 'vidlink') {
                 src = `https://vidlink.pro/tv/${currentTmdbId}/${currentSeason}/${currentEpisode}`;
             } else if (currentHost === 'moviee') {
@@ -212,7 +212,7 @@ if (getCookie('currentEngine') === 'tmdb') {
             } else if (currentHost === 'filmku') {
                 src = `https://filmku.stream/embed/movie?tmdb=${currentTmdbId}`;
             } else if (currentHost === 'vidsrc-nl') {
-                src = `https://player.vidsrc.nl/embed/movie/${currentImdbId}`;
+                src = `https://player.vidsrc.nl/embed/movie/${currentTmdbId}`;
             } else if (currentHost === 'vidlink') {
                 src = `https://vidlink.pro/movie/${currentTmdbId}`;
             } else if (currentHost === 'moviee') {
