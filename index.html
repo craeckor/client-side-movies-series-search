@@ -22,43 +22,54 @@
     </script>
 </head>
 <body>
-    <h1>Movie and Series Search</h1>
-    <button id="switchEngineButton" onclick="switchEngine()">Switch to TMDB</button>
-    <input type="text" id="searchInput" placeholder="Enter search term">
-    <div id="iframeContainer">
-        <iframe id="movieIframe" allowfullscreen></iframe>
-        <div id="buttonContainer">
-            <div id="leftControls">
-                <select id="hostSelect" onchange="changeHost()">
-                    <option value="vidsrc-pro">VidSrc.pro</option>
-                    <option value="autoembed">AutoEmbed</option>
-                    <option value="superembed">SuperEmbed</option>
-                    <option value="2embed">2Embed</option>
-                    <option value="vidsrc-me">VidSrc.me</option>
-                    <option value="vidsrc-cc">VidSrc.cc</option>
-                    <option value="smashystream">SmashyStream</option>
-                    <option value="moviesapi">Moviesapi</option>
-                    <option value="primewire">PrimeWire</option>
-                    <option value="filmku">FILMku</option>
-                    <option value="vidsrc-nl">VidSrc.nl</option>
-                </select>
-                <div id="infoText"></div>
+    <div id="mainContainer">
+        <header>
+            <h1>Movie and Series Search</h1>
+            <div id="headerControls">
+                <button id="switchEngineButton" onclick="switchEngine()">Switch to TMDB</button>
+                <input type="text" id="searchInput" placeholder="Enter search term">
             </div>
-            <div id="rightControls">
-                <button id="seasonBackButton" onclick="changeSeason(-1)">Season -</button>
-                <button id="seasonForwardButton" onclick="changeSeason(1)">Season +</button>
-                <button id="episodeBackButton" onclick="changeEpisode(-1)">Episode -</button>
-                <button id="episodeForwardButton" onclick="changeEpisode(1)">Episode +</button>
-                <button id="fullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
-                <button id="closeButton" onclick="closeIframe()">Close</button>
+        </header>
+        <main>
+            <div id="iframeContainer">
+                <iframe id="movieIframe" allowfullscreen></iframe>
+                <div id="buttonContainer">
+                    <div id="leftControls">
+                        <select id="hostSelect" onchange="changeHost()">
+                            <option value="vidsrc-pro">VidSrc.pro</option>
+                            <option value="autoembed">AutoEmbed</option>
+                            <option value="superembed">SuperEmbed</option>
+                            <option value="2embed">2Embed</option>
+                            <option value="vidsrc-me">VidSrc.me</option>
+                            <option value="vidsrc-cc">VidSrc.cc</option>
+                            <option value="smashystream">SmashyStream</option>
+                            <option value="moviesapi">MoviesAPI</option>
+                            <option value="primewire">PrimeWire</option>
+                            <option value="filmku">FILMku</option>
+                            <option value="vidsrc-nl">VidSrc.nl</option>
+                        </select>
+                        <div id="infoText"></div>
+                    </div>
+                    <div id="rightControls">
+                        <button id="seasonBackButton" onclick="changeSeason(-1)">Season -</button>
+                        <button id="seasonForwardButton" onclick="changeSeason(1)">Season +</button>
+                        <button id="episodeBackButton" onclick="changeEpisode(-1)">Episode -</button>
+                        <button id="episodeForwardButton" onclick="changeEpisode(1)">Episode +</button>
+                        <button id="fullscreenButton" onclick="toggleFullscreen()">Fullscreen</button>
+                        <button id="closeButton" onclick="closeIframe()">Close</button>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div id="output"></div>
+        </main>
+        <footer>
+            <a href="https://github.com/craeckor/client-side-movies-series-search" target="_blank">
+                <img src="assets/image/github-mark.svg" alt="GitHub" style="width: 24px; height: 24px;">
+            </a>
+        </footer>
     </div>
-    <div id="output"></div>
-    <footer>
-        <a href="https://github.com/craeckor/client-side-movies-series-search" target="_blank">
-            <img src="assets/image/github-mark.svg" alt="GitHub" style="width: 24px; height: 24px;">
-        </a>
-    </footer>
+    <script src="assets/js/imdb.js"></script>
+    <script src="assets/js/tmdb.js"></script>
+    <script src="assets/js/switcher.js"></script>
 </body>
 </html>

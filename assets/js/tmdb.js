@@ -243,13 +243,15 @@ if (getCookie('currentEngine') === 'tmdb') {
     }
 
     function toggleFullscreen() {
-        const iframeContainer = document.getElementById('iframeContainer');
-        if (!document.fullscreenElement) {
-            iframeContainer.requestFullscreen().catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            document.exitFullscreen();
+        const movieIframe = document.getElementById('movieIframe');
+        if (movieIframe.requestFullscreen) {
+            movieIframe.requestFullscreen();
+        } else if (movieIframe.mozRequestFullScreen) { // Firefox
+            movieIframe.mozRequestFullScreen();
+        } else if (movieIframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
+            movieIframe.webkitRequestFullscreen();
+        } else if (movieIframe.msRequestFullscreen) { // IE/Edge
+            movieIframe.msRequestFullscreen();
         }
     }
 

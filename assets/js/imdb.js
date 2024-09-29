@@ -5,13 +5,13 @@ if (getCookie('currentEngine') === 'imdb') {
     let currentEpisode = 1;
     let isSeries = false;
     let currentTitle = '';
-    let currentHost = getCookie('currentHost') || 'moviesapi';
+    let currentHost = getCookie('currentHost_imdb') || 'moviesapi';
 
     if (!getCookie('currentHost_imdb') || currentHost === 'moviee' || currentHost === 'vidlink') {
         currentHost = 'moviesapi';
         setCookie('currentHost_imdb', 'moviesapi', 5); // Set the cookie to 'moviesapi' if it doesn't exist or is invalid
     }
-
+    
     document.getElementById('hostSelect').value = currentHost;
 
     document.getElementById('searchInput').addEventListener('input', () => {
@@ -202,7 +202,7 @@ if (getCookie('currentEngine') === 'imdb') {
         setCookie('currentHost_imdb', currentHost, 5);
         updateIframe();
     }
-
+    
     function setCookie(name, value, days) {
         const d = new Date();
         d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
