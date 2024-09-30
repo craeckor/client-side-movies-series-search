@@ -168,6 +168,25 @@ footer {
         padding: 8px;
     }
 
+    #buttonContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    
+    #leftControls, #rightControls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    #leftControls select, #rightControls button {
+        flex: 1 1 45%;
+        margin: 5px;
+        padding: 10px;
+    }
+    
     #infoText {
         font-size: 0.8em;
     }
