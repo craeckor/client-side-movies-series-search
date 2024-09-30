@@ -1,7 +1,7 @@
 function updateHostOptions() {
     let currentHost = getCookie('currentHost') || 'moviesapi';
     const hostSelect = document.getElementById('hostSelect');
-    const currentEngine = getCookie('currentEngine');
+    currentEngine = getCookie('currentEngine');
 
     // Clear existing options
     hostSelect.innerHTML = '';
@@ -64,7 +64,7 @@ if (getCookie('currentEngine') === 'tmdb') {
 
     document.getElementById('searchInput').addEventListener('input', () => {
         clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(fetchData, 300);
+        debounceTimeout = setTimeout(fetchData, 1500);
     });
     
     // Call updateHostOptions on page load
@@ -239,7 +239,10 @@ if (getCookie('currentEngine') === 'tmdb') {
     }
 
     function closeIframe() {
-        document.getElementById('iframeContainer').style.display = 'none';
+        const iframeContainer = document.getElementById('iframeContainer');
+        const movieIframe = document.getElementById('movieIframe');
+        movieIframe.src = '';
+        iframeContainer.style.display = 'none';
     }
 
     function toggleFullscreen() {
@@ -273,23 +276,5 @@ if (getCookie('currentEngine') === 'tmdb') {
         currentHost = document.getElementById('hostSelect').value;
         setCookie('currentHost', currentHost, 5);
         updateIframe();
-    }
-
-    function setCookie(name, value, days) {
-        const d = new Date();
-        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = "expires=" + d.toUTCString();
-        document.cookie = name + "=" + value + ";" + expires + ";path=/";
-    }
-
-    function getCookie(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
     }
 }
