@@ -121,7 +121,7 @@ if (getCookie('currentEngine') === 'tmdb') {
             const releaseYear = (item.release_date || item.first_air_date || '').split('-')[0];
 
             preview.innerHTML = `
-                <img src="${item.poster_path ? 'https://image.tmdb.org/t/p/w200' + item.poster_path : 'https://via.placeholder.com/200'}" alt="${item.title || item.name}">
+                <img src="${item.poster_path ? 'https://image.tmdb.org/t/p/w200' + item.poster_path : 'assets/image/unavailed.png'}" alt="${item.title || item.name}">
                 <h3>${item.title || item.name}</h3>
                 <p>${overview}</p>
                 <p>${releaseYear}</p>

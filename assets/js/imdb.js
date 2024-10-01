@@ -51,7 +51,7 @@ if (getCookie('currentEngine') === 'imdb') {
                 preview.className = 'preview';
                 preview.onclick = () => openIframe(item.id, item.qid, item.l);
                 preview.innerHTML = `
-                    <img src="${item.i ? item.i.imageUrl : 'https://via.placeholder.com/200'}" alt="${item.l}">
+                    <img src="${item.i ? item.i.imageUrl : 'assets/image/unavailed.png'}" alt="${item.l}">
                     <h3>${item.l}</h3>
                     <p>${item.s ? item.s : 'No description available'}</p>
                     <p>${item.y ? item.y : ''}</p>
